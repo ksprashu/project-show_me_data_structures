@@ -27,3 +27,23 @@ Or launch and run the jupyter notebook files
 ```bash
 $ jupyter notebook
 ```
+
+## Problems and Solutions
++ `problem_1.py`\
+Implements a LRU (Least Recently Used) Cache with a fixed cache size
+
++ `problem_2.py`\
+Implements 
+
++ `problem_3.py`\
+Implements 
+
++ `problem_4.py`\
+Implements 
+
++ `problem_5.py`\
+Implements 
+
++ `problem_6.py`\
+Implements
+

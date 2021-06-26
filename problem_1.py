@@ -114,7 +114,7 @@ class LRU_Cache(object):
         self._lru_queue = UniqueQueue()
 
     def get(self, key):
-        """Retrieve item from provided key. Return -1 if nonexistent.
+        """Retrieves item from provided key. Return -1 if nonexistent.
         """
 
         if key in self._contents:
@@ -124,8 +124,7 @@ class LRU_Cache(object):
             return -1
 
     def set(self, key, value):
-        """Set the value if the key is not present in the cache.
-
+        """Sets the value if the key is not present in the cache.
         If the cache is at capacity remove the oldest item.
         """
 
@@ -152,3 +151,6 @@ class LRU_Cache(object):
         assert oldest in self._contents, \
             f'LRU Queue has {oldest} but not the contents'
         del self._contents[oldest]
+
+
+# Sample test cases are there in the associated Unit Test file
