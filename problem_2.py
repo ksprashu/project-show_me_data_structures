@@ -1,11 +1,20 @@
 """This program finds all files inside a directory structure that ends in ".c"
+
+  The program can be run passing in 2 command line parameters to specify the
+  starting path and the suffix to look for.
+
+  eg:
+    $ python problem_2.py "/home/${USER}" ".py"
+
+  By default it will run on the path "./testdir" and look for the suffix ".c"
+
 """
 
 import os
-
-# import sys
-# sys.setrecursionlimit(10**6)  # use this if we run into stack overflow
+import sys
 # import tracemalloc
+
+# sys.setrecursionlimit(10**6)  # use this if we run into stack overflow
 
 
 def find_files(suffix, path):
@@ -51,8 +60,15 @@ def find_files(suffix, path):
 
 # tracemalloc.start()
 
-for f in find_files('.c', './testdir'):
-    print(f)
+if __name__ == '__main__':
+    path = './testdir'  # default path
+    suffix = '.c'  # default suffix
+    if len(sys.argv) == 3:
+        path = sys.argv[1]
+        suffix = sys.argv[2]
+
+    for f in find_files(suffix, path):
+        print(f)
 
 # print('current usage {}, peak usage {}'.format(
 #     *tracemalloc.get_traced_memory()))
