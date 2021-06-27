@@ -23,7 +23,12 @@ $ pytest problem_1_test.py # for a single test
 $ pytest # for all tests
 ```
 
-Or launch and run the jupyter notebook files
+You can also run the test code samples without doing a 'unittest'
+```bash
+$ python problem_1_test.py -v # run a single test case
+```
+
+Or launch and run the jupyter notebook files where available
 ```bash
 $ jupyter notebook
 ```
@@ -31,12 +36,22 @@ $ jupyter notebook
 ## Problems and Solutions
 + `problem_1.py`\
 Implements a LRU (Least Recently Used) Cache with a fixed cache size
+```bash
+$ python problem_1_test.py -v
+```
 
 + `problem_2.py`\
-Implements 
+Implements a Recursive solution to scanning a directory tree for files ending with a specific extension.
+```bash
+$ python problem_2.py # to use the default path and suffix
+$ python problem_2.py "./testdir" ".c" # specify the path and file suffix
+```
 
 + `problem_3.py`\
-Implements 
+Implements a Huffman Compression algorithm for encoding and decoding a given string
+```bash
+$ python problem_3_test.py -v
+```
 
 + `problem_4.py`\
 Implements 
