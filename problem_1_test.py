@@ -2,7 +2,8 @@
 """
 
 import unittest
-from problem_1 import DoubleNode, UniqueQueue, LRU_Cache
+from problem_1 import LRU_Cache
+from problem_1_lib import DoubleNode, UniqueQueue
 
 
 class DoubleNodeTest(unittest.TestCase):
