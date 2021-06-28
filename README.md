@@ -54,7 +54,10 @@ $ python problem_3_test.py -v
 ```
 
 + `problem_4.py`\
-Implements 
+Implements a User lookup in an Active Directory tree
+```bash
+$ python problem_4.py
+```
 
 + `problem_5.py`\
 Implements 
