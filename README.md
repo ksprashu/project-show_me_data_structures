@@ -62,7 +62,10 @@ $ python problem_4.py
 ```
 
 + `problem_5.py`\
-Implements 
+Implements a BlockChain
+```bash
+$ python problem_5.py
+```
 
 + `problem_6.py`\
 Implements
