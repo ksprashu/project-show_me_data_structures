@@ -50,7 +50,9 @@ $ python problem_2.py "./testdir" ".c" # specify the path and file suffix
 + `problem_3.py`\
 Implements a Huffman Compression algorithm for encoding and decoding a given string
 ```bash
-$ python problem_3_test.py -v
+$ python problem_3_test.py -v # run test cases
+$ python problem_3.py # run samples within main program
+$ python problem_3_lib_test.py -v # run test cases for library files
 ```
 
 + `problem_4.py`\
