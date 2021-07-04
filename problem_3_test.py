@@ -76,7 +76,7 @@ class HuffmannCodingTest(unittest.TestCase):
     def test_encode_abb(self):
         code, tree = huffman_encoding('abb')
         self.assertEqual(code, '011')
-        self.assertEqual(huffman_decoding(code, tree), 'abb')        
+        self.assertEqual(huffman_decoding(code, tree), 'abb')
 
     def test_encode_long_string(self):
         text = 'AAAAAAABBBCCCCCCCCDDEEEEEE'

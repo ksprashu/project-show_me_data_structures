@@ -68,5 +68,7 @@ $ python problem_5.py
 ```
 
 + `problem_6.py`\
-Implements
-
+Implements a Union and Intersection operation on LinkedLists
+```bash
+$ python problem_5.py
+```
