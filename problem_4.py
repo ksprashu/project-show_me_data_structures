@@ -30,8 +30,6 @@ class Group(object):
     def _is_child(parent, child):
         """Recursively lookup the child entry to find the parent.
         """
-        
-        # print(f'looking for parent - {parent} of child - {child} in {Group.parent_mapping}')
 
         # base condition - no entry for child
         if child not in Group.parent_mapping:

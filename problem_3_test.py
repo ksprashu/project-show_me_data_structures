@@ -96,7 +96,7 @@ class HuffmannCodingTest(unittest.TestCase):
 
     def test_single_char_string(self):
         code, tree = huffman_encoding('AAAAA')
-        self.assertEqual(huffman_decoding(code, tree), 'AAAAA')        
+        self.assertEqual(huffman_decoding(code, tree), 'AAAAA')
 
 
 if __name__ == "__main__":
