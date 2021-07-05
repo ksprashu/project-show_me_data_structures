@@ -85,6 +85,19 @@ class HuffmannCodingTest(unittest.TestCase):
         self.assertEqual(code, expected)
         self.assertEqual(huffman_decoding(code, tree), text)
 
+    # throw error if encoding empty string
+    def test_encode_empty_string(self):
+        with self.assertRaisesRegex(AttributeError, 'empty text'):
+            huffman_encoding('')
+
+    def test_single_char(self):
+        code, tree = huffman_encoding('a')
+        self.assertEqual(huffman_decoding(code, tree), 'a')
+
+    def test_single_char_string(self):
+        code, tree = huffman_encoding('AAAAA')
+        self.assertEqual(huffman_decoding(code, tree), 'AAAAA')        
+
 
 if __name__ == "__main__":
     unittest.main()
