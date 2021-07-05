@@ -31,6 +31,8 @@ class LRU_Cache(object):
         If the cache is at capacity remove the oldest item.
         """
 
+        assert key is not None, 'Key cannot be empty'
+
         if self._is_full():
             self._flush_lru_key()
 
