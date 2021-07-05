@@ -104,11 +104,11 @@ if __name__ == '__main__':
 
     # child under the bottom most group
     print()
-    print('sub_child_user in sub_child group? ',
+    print(f'{sub_child_user} in group {sub_child.get_name()}? ',
           is_user_in_group(sub_child_user, sub_child))  # True
-    print('sub_child_user in child group? ',
+    print(f'{sub_child_user} in group {child.get_name()}? ',
           is_user_in_group(sub_child_user, child))  # True
-    print('sub_child_user in parent group? ',
+    print(f'{sub_child_user} in group {parent.get_name()}? ',
           is_user_in_group(sub_child_user, parent))  # True
 
     child_user = "child_user"
@@ -116,34 +116,61 @@ if __name__ == '__main__':
 
     # child under the intermediate group
     print()
-    print('child_user in sub_child group? ',
+    print(f'{child_user} in group {sub_child.get_name()}? ',
           is_user_in_group(child_user, sub_child))  # False
-    print('child_user in child group? ',
+    print(f'{child_user} in group {child.get_name()} ? ',
           is_user_in_group(child_user, child))  # True
-    print('child_user in parent group? ',
+    print(f'{child_user} in group {parent.get_name()} ? ',
           is_user_in_group(child_user, parent))  # True
 
-    forked_child = Group("forked_child")
-    parent.add_group(forked_child)
+    parallel_child = Group("parallel_child")
+    parent.add_group(parallel_child)
 
     # child not under a forked group, but under overall parent
     print()
-    print('child_user in child group? ',
+    print(f'{child_user} in group {child.get_name()}? ',
           is_user_in_group(child_user, child))  # True
-    print('child_user in forked_child group? ',
-          is_user_in_group(child_user, forked_child))  # False
-    print('child_user in parent group? ',
+    print(f'{child_user} in parallel_child group? ',
+          is_user_in_group(child_user, parallel_child))  # False
+    print(f'{child_user} in parent group? ',
           is_user_in_group(child_user, parent))  # True
 
-    forked_child.add_user(child_user)
+    # add child user to parallel child group
+    parallel_child.add_user(child_user)
 
     # child belong to 2 parallel groups but not in the bottommost
     print()
-    print('child_user in sub_child group? ',
+    print(f'{child_user} in group {sub_child.get_name()}? ',
           is_user_in_group(child_user, sub_child))  # False
-    print('child_user in child group? ',
+    print(f'{child_user} in group {child.get_name()}? ',
           is_user_in_group(child_user, child))  # True
-    print('child_user in forked_child group? ',
-          is_user_in_group(child_user, forked_child))  # True
-    print('child_user in parent group? ',
+    print(f'{child_user} in group {parallel_child.get_name()}? ',
+          is_user_in_group(child_user, parallel_child))  # True
+    print(f'{child_user} in group {parent.get_name()}? ',
           is_user_in_group(child_user, parent))  # True
+
+    # Test Case - user not added to a group
+    print()
+    unknown_user = 'unknown_user'
+    print(f'{unknown_user} in group {child.get_name()}? ',
+          is_user_in_group(unknown_user, child))  # False
+    print(f'{unknown_user} in group {parent.get_name()}? ',
+          is_user_in_group(unknown_user, parent))  # False
+
+    # Test Case - Group doesn't have any children
+    lone_group = Group("empty")
+    print()
+    print(f'{child_user} in group {lone_group.get_name()}? ',
+          is_user_in_group(child_user, lone_group))  # False
+    print(f'{sub_child_user} in group {lone_group.get_name()}? ',
+          is_user_in_group(sub_child_user, lone_group))  # False
+
+    # Test Case - Group doesn't belong to parent group
+    independent_group = Group("independent")
+    independent_user = "independent_user"
+    independent_group.add_user(independent_user)
+    print()
+    print(f'{independent_user} in group {independent_group.get_name()}? ',
+          is_user_in_group(independent_user, independent_group))  # True
+    print(f'{independent_user} in group {parent.get_name()}? ',
+          is_user_in_group(independent_user, parent))  # False
