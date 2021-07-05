@@ -19,13 +19,17 @@ Hence we will create a custom Queue for this requirement with the following desi
 The queue should store only one copy of an element. This is because if the elements pushed are for example `1, 2, 3, 1, 2`, then when we pop we should get back 3 as the least recently used element and we want to be able to get that back with minimum time complexity. Hence whenever an element is pushed to the tail of the queue, we should remove it from elsewhere in the queue. This is where the lookup helps. 
 
 ### Time Complexity
+There are 2 operations that are done here. 
+1. Looking for an entry in the cache, and
+2. Adding a key-value entry to the cache
 #### Lookup `get()`
-
-`HashMap` - This is straigh forward and lookup happens in `O(1)`\
-`Unique Queue`\
-There are two parts to this process
-1. Creating a new node in the Linked Queue
-2. Updating the lookup and updating the Queue
+There are 2 parts to the lookup. 
+1. Look for the key in the lookup table.\
+Since we are using a hashmap for this, the lookup happens in `O(1)`
+2. Update the Least Recently Used queue.\
+Updating the queue is again broken into the following operations
+    1. Creating a new node on the queue
+    2. Updating the lookup with the new reference
 
 Creating a new node does the following
 1. Creating a node and setting its value
@@ -34,34 +38,40 @@ Creating a new node does the following
 4. Updating the left and right nodes
 5. Updating the head / tail nodes
 
-While this does take about 5 instructions, it is not dependent on the size of the cache and hence happens in constant time - `O(1)`
+While this does take about 5 instructions, it is not dependent on the size of the total entries in the cache and hence happens in constant time - `O(1)`
 
 Updating the lookup does the following
 1. Remove the previous entry of the key element from the Queue. This happens in constant time `O(1)` to look up the node address. 
 2. Then the process to connect its left and right nodes to each other, and create a new node at the tail. Agains while there are a few operations done here, it happens in constant time `O(1)` and is not dependant on the size of the queue.
 
-Hence overall, Lookup happens in constant time, especially relative to a large cache size.
+Hence overall, Lookup happens in constant time, especially relative to a large cache size. There are multiple operations, each taking a worst case time of `O(1)` and\
+hence the overall worst case time is `O(1)`.
 
 #### Insert `put()`
+Similar to `get()`, this operation consists of 2 parts.
+1. Inserting an element into the lookup. This happens in `O(1)`
+2. Add a least recently used entry into the Queue\
+This is the same as the Lookup operation since all it does is to update the access to the element and as discussed before, this happens in constant time `O(1)`.
 
-`HashMap` - Inserting an element into the lookup happens in `O(1)`\
-`Unique Queue`\
-This is the same as the Lookup operation since all it does is to update the access to the element and as discussed before, this happens in constant time `O(1)`\
-`Remove oldest entry` - Since this is a LRU cache, the oldest entry has to be removed if we are at the limit of the cache size. This involves the following operations
+However, if the cache is full, since this is a LRU cache, the oldest entry has to be removed if we are at the limit of the cache size. This involves the following operations
 1. Pop the element from the head of the queue
 2. Update the queue to a new head
 3. Remove the element from the lookup
 
-All the above are operations that will happen in constant time `O(1)`.
+All the above are operations that will happen in constant time since it requires
+modifying a single node and happens in `O(1)`.
 
-Hence teh overall Insert operation will also happen in constant time `O(1)`
+Hence, since multiple operations are all taking only `O(1)`,
+the overall Insert operation will also happen in constant time `O(1)`
 
 ### Space Complexity
 For each element in the queue, the following entries are created.
-1. 1 key-value in the cache lookup dictionary
-2. 1 key-value in the LRU queue lookup dictionary
-3. 1 node in the linked list
+1. 1 key-value in the cache lookup dictionary which stores the key + value
+2. 1 key-value in the LRU queue lookup dictionary which stores the key + reference 
+to node
+3. 1 node in the linked list, which contains the value, and 2 pointers to the 
+previous and next nodes.
 
 There are also constant references for book keeping such as head, tail, etc.
 
-Hence for each entry there are about 3 memory spaces used across the data structures. The space used is then 3 * n, which amounts to `O(n)`
+Hence for each entry there are about 5 memory spaces used across the data structures. The total space used is then 5 * n, which amounts to `O(n)`

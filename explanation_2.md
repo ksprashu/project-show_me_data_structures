@@ -11,12 +11,31 @@ Using a list and adding the filtered files into the same list we are able to imp
 
 The base condition is that the leaf folders will not have any more folders and will either return no file (`[]`) or the files that matches the suffix filter. This will be a list which will be added to the already existing list (`extend()`) before finally being returned back at the top of the stack.
 
-### Complexity
+### Time Complexity
+In order to find all the files that match the suffix, the program will have to
+scan through every directory and file in the folder hierarchy. Let's assume that the 
+total number of directories is `d` and total number of files is `f`.
 
-The program will recurse up to the depth of the tree structure. Each time, the stack of the parent is saved while it goes down the recursion. However the data that is stored is only as much as the number of files that are already filtered at the parent level and the number of sub folders at the current level. 
+The program makes `O(d)` operations on the OS when it calls `os.listdir()` to get
+the files in the folder. For each folder + file, we check whether it is a file or folder, and for the folder, we perform a suffix check. This is `O(f+d) + O(f)`
+operations. Total time complexity = `O(f+d) + O(f) + O(d)` which approxmiates to 
+`O(2.(f+d))`.
 
-Hence this is directly proportional to the number of folders and files in the file system and it has to go through all the files + folders just once. 
+Assume total number of records in the file system is `n`, then the __overall time
+complexity is of the order `O(n)`__.
 
-Hence\
-Time Complexity = `O(n)`\
-Space Complexity = `O(n)` 
+### Space Complexity
+Each time the problem reurses into a folder, it has to save the contents of the
+stack to memory. We are using `O(1)` space to record each file / folder. 
+
+In each iteration, the problem will save the names of the files that match the
+filter, and discard the rest of the data. At any instant the total data that 
+could be stored in the stack will be the list of all the folders that need to be
+parsed. While the actual storage at the end of the program will be the filtered
+files.
+
+Each file path could occupy (say) 255 characters, or 255 bytes. Let's assume the
+total number of filtered files is `f'` where `f' < f`.
+
+Hence max space that could be used transiently is `O(n)`, and the space that
+will finally be occupied at the end of the program is __of the order `O(f')`__.

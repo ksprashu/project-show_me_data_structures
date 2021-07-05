@@ -36,9 +36,36 @@ This can be validated by checking the `previous_hash` in the newer node to
 determine whether the current node has been tampered with.
 
 ## Complexity
-`Time complexity` is `O(1)` for every insertion and fetching the latest hash.\
-For validating a node in case the blockchain itself is tampered with,
-the complexity is `O(n)`. For validating against the node itseld, the complexity
-is `O(1)`.\
-`Space complexity` is `O(n)` since as many nodes have to be created for each 
-data.
+### Time Complexity
+#### Insertion
+When inserting a block, there are two operations to be performed. 
+1. Compute the hash of the block. While this is an intensive operation, this will
+take a constant time per block. The order is `O(1)`
+2. The block is then inserted into the linked list. This would take 2-3 book-keeping 
+operations to adjust the previous reference and update the head. The order for this
+is `O(1)`.
+
+Total time complexity for insert is then `O(1)` for each block.
+
+#### Validation
+For validating a block against it's hash, only the hash has to be recomputed. 
+This is done in `O(1)` time. When validating against the blockchain or when
+validating the blockchain itself, we might have to go through the entire linked
+list and this will take `O(n)` time.
+
+This could be optimised with a lookup table at the cost of increased space complexity.
+However since we don't understand all the use cases of blockchain as yet, we will 
+not implement this for now.
+
+### Space Complexity
+
+For each block, 4 values are saved - the data, timestamp, previous hash, and
+own hash. In addition, the node itself will store a reference to the previous node
+which is an additional space. 
+
+Since there are a fixed number of references and values saved per block and this
+doesn't change with the block, the space complexity for each block is of the order
+`O(1)`.
+
+Validation doesn't need any additonal space as we will walk through the node
+or list in-memory.

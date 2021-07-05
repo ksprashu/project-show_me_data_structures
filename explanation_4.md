@@ -38,9 +38,21 @@ we will have it as static attributes and methods on the class.
 ### Complexity
 This solution prioritizes Time complexity over Space complexity. 
 
-`Space Complexity` will be `O(n) + O(k)` where `n` is the number of groups, and 
-`k` is the number of users as there will be an additional lookup entry for each.
+#### Time Complexity
+The lookup contains all the relations that are created. Each relationship takes us
+up the hierarchy to the next higher relationship. Assuming the relationship hierarchy
+takes the shape of a tree, and assuming a uniform distribution of nodes and 
+relationships in the tree, the worst case is to walk up the height of the tree from
+the leaf node to the root. Since there are `log(n)` nodes in the path to the height, 
+the worst case time complexity for each lookup is `O(log(n))`.
+#### Space Complexity
+Every group or user is stored as a single object. In addition, every relationship
+is stored as another entry within the group. Every relationship is also stored
+in the lookup table for faster access. 
 
-`Time Complexity` will be `O(n')` where `n'` is the exact number of groups that 
-the given user belongs to. In an evenly distributed directory tree, this could
-be considered as a worst case complexity of `O(log(n))`.
+The groups and users are akin to nodes on a tree and the relationships are the edges
+of the tree. If `n` represents the number of users + groups in the directory, then
+there are about `2n` edges for the tree on average. This is stored twice. Hence total
+space used is `5n`. 
+
+The space complexity is of the order of `O(n)`.
