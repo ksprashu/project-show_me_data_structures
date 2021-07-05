@@ -46,9 +46,12 @@ class BlockChain:
 
         Verifies that the data is consistent before adding the block.
         """
-
+        assert block and block.data and block.hash is not None, \
+            'Block is empty or doesn\'t have a hash.'
         assert block.previous_hash == self.get_latest_hash(), \
-            'Hash mismatch at addition; top of Blockchain might have moved'
+            'Hash mismatch at addition; top of Blockchain might have moved.'
+        assert block.timestamp > self.get_latest_timestamp(), \
+            'Block has to be newer than the last block on the BlockChain.'
 
         new_node = Node(block)
 
@@ -64,13 +67,50 @@ class BlockChain:
         else:
             return 0
 
+    def get_latest_timestamp(self):
+        if self.head:
+            return self.head.block.timestamp
+        else:
+            return datetime.datetime.fromtimestamp(0, datetime.timezone.utc)
+
+    def validate_block(self, block):
+        """Validates the block and throws an exception if not.
+
+        Checks for the block hash validity.
+        Checks whether the block has been linked to from a newer block.
+        """
+        assert block.hash == block.calc_hash(), \
+            f'Warning! Block {block.hash} has a bad hash.'
+
+        node = self.head
+        while node:
+            if node.block.hash == block.hash:
+                break
+            node = node.prev
+        assert node is not None, \
+            f'Warning! Block {block.hash} not found on blockchain'
+
+    def validate_blockchain(self):
+        node = self.head
+        while node.prev:
+            assert node.block.previous_hash == node.prev.block.hash, \
+                'Warning! Violation in the BlockChain'
+            node = node.prev
+
 
 if __name__ == '__main__':
 
     blockchain = BlockChain()
 
+    # insert empty block
+    try:
+        blockchain.add_block(None)
+    except AssertionError as e:
+        print(f'Assertion Raised - {e}')
+
     data1 = 'First Block'
-    timestamp1 = datetime.datetime.utcnow() - datetime.timedelta(hours=25)
+    timestamp1 = datetime.datetime.now(datetime.timezone.utc) - \
+        datetime.timedelta(hours=25)
     print(f'\nBlock with data - {data1}, at {timestamp1}')
     block1 = Block(timestamp1, data1, blockchain.get_latest_hash())
     print(f'Block hash = {block1.hash}')
@@ -79,33 +119,57 @@ if __name__ == '__main__':
     blockchain.add_block(block1)
 
     data2 = 'This is a valid text.'
-    timestamp2 = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
+    timestamp2 = datetime.datetime.now(datetime.timezone.utc) - \
+        datetime.timedelta(hours=5)
     print(f'\nBlock with data - {data2}, at {timestamp2}')
     block2 = Block(timestamp2, data2, blockchain.get_latest_hash())
     print(f'Block hash = {block2.hash}')
 
     data3 = 'Final Block'
-    timestamp3 = datetime.datetime.utcnow() - datetime.timedelta(hours=4)
-    print(f'\nBlock with data - {data3}, at {timestamp3}')
-    block3 = Block(timestamp3, data3, blockchain.get_latest_hash())
+    print(f'\nBlock with data - {data3}, at {timestamp2}')
+    block3 = Block(timestamp2, data3, blockchain.get_latest_hash())
     print(f'Block hash = {block3.hash}')
 
     # insert block2
     blockchain.add_block(block2)
 
-    # race condition inserting block3
+    # error inserting block3 - hash
     try:
+        print('\nShould raise a hash assertion')
         blockchain.add_block(block3)
     except AssertionError as e:
         print(f'Assertion Raised - {e}')
 
-    timestamp3 = datetime.datetime.utcnow() - datetime.timedelta(hours=1)
+    # error inserting block3 - timestamp
+    block3 = Block(timestamp2, data3, blockchain.get_latest_hash())
+    try:
+        print('\nShould raise a timestamp assertion')
+        blockchain.add_block(block3)
+    except AssertionError as e:
+        print(f'Assertion Raised - {e}')
+
+    # error inserting block3 - data
+    block3 = Block(timestamp2, '', blockchain.get_latest_hash())
+    try:
+        print('\nShould raise a data assertion')
+        blockchain.add_block(block3)
+    except AssertionError as e:
+        print(f'Assertion Raised - {e}')
+
+    timestamp3 = datetime.datetime.now(datetime.timezone.utc) - \
+        datetime.timedelta(hours=1)
     print(f'\nBlock with data - {data3}, at {timestamp3}')
     block3 = Block(timestamp3, data3, blockchain.get_latest_hash())
     print(f'Block hash = {block3.hash}')
 
     # insert block3 properly
     blockchain.add_block(block3)
+
+    # check that everything is good
+    blockchain.validate_block(block3)  # no exceptions
+    blockchain.validate_block(block2)  # no exceptions
+    blockchain.validate_blockchain()  # no exceptions
+    print('\nBlockChain is valid')
 
     # Let's tamper with block2
     print('\nTamper data of block2')
@@ -114,8 +178,7 @@ if __name__ == '__main__':
 
     # Validate the block using the hash
     try:
-        assert bad_block.hash == bad_block.calc_hash(), \
-            'Warning! Block has a wrong hash.'
+        blockchain.validate_block(bad_block)
     except AssertionError as e:
         print(f'Assertion Raised - {e}')
 
@@ -124,22 +187,14 @@ if __name__ == '__main__':
     old_hash = bad_block.hash
     bad_block.hash = bad_block.calc_hash()
 
-    # Validate the block by checking against the block chain
-    node = blockchain.head
-    while node:
-        if node.block.hash == bad_block.hash:
-            break
-        node = node.prev
-
     try:
-        assert node is not None, 'Warning! Block not found on blockchain'
+        blockchain.validate_block(bad_block)
     except AssertionError as e:
         print(f'Assertion Raised - {e}')
 
     # Tamper with blockchain
     print('\nTamper with Blockchain')
     node = blockchain.head
-    newer_block = None
     while node:
         if node.block.hash == old_hash:
             node.block = bad_block
@@ -148,9 +203,6 @@ if __name__ == '__main__':
 
     # Validate violation in the chain
     try:
-        node = blockchain.head
-        while node:
-            assert node.block.previous_hash == node.prev.block.hash, \
-                'Warning! Violation in the block chain'
+        blockchain.validate_blockchain()
     except AssertionError as e:
         print(f'Assertion Raised - {e}')
