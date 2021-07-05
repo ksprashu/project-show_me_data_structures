@@ -95,7 +95,6 @@ def intersection(llist_1, llist_2):
 
 
 # Test case 1
-
 linked_list_1 = LinkedList()
 linked_list_2 = LinkedList()
 
@@ -112,9 +111,10 @@ print(union(linked_list_1, linked_list_2))
 # [3, 2, 4, 35, 6, 65, 6, 4, 3, 21, 6, 32, 4, 9, 6, 1, 11, 21, 1]
 print(intersection(linked_list_1, linked_list_2))
 # [4, 6, 6, 21]
+print()
+
 
 # Test case 2
-
 linked_list_3 = LinkedList()
 linked_list_4 = LinkedList()
 
@@ -131,8 +131,10 @@ print(union(linked_list_3, linked_list_4))
 # [3, 2, 4, 35, 6, 65, 6, 4, 3, 23, 1, 7, 8, 9, 11, 21, 1]
 print(intersection(linked_list_3, linked_list_4))
 # [] == empty
+print()
 
-# Test case 3
+
+# Test case 3 - single elements
 linked_list_5 = LinkedList()
 linked_list_6 = LinkedList()
 
@@ -145,12 +147,11 @@ for i in element_1:
 for i in element_2:
     linked_list_6.append(i)
 
-print(union(linked_list_5, linked_list_6))
-# [1, 1]
-print(intersection(linked_list_5, linked_list_6))
-# [1]
+print(union(linked_list_5, linked_list_6))  # [1, 1]
+print(intersection(linked_list_5, linked_list_6))  # [1]
+print()
 
-# Test case 4
+# Test case 4 - element repeating in one list
 linked_list_5 = LinkedList()
 linked_list_6 = LinkedList()
 
@@ -163,12 +164,12 @@ for i in element_1:
 for i in element_2:
     linked_list_6.append(i)
 
-print(union(linked_list_5, linked_list_6))
-# [1, 1, 1]
-print(intersection(linked_list_5, linked_list_6))
-# [1]
+print(union(linked_list_5, linked_list_6))  # [1, 1, 1]
+print(intersection(linked_list_5, linked_list_6))  # [1]
+print()
 
-# Test case 5
+
+# Test case 5 - element repeating in both lists
 linked_list_5 = LinkedList()
 linked_list_6 = LinkedList()
 
@@ -181,7 +182,40 @@ for i in element_1:
 for i in element_2:
     linked_list_6.append(i)
 
-print(union(linked_list_5, linked_list_6))
-# [1, 1, 1, 1]
-print(intersection(linked_list_5, linked_list_6))
-# [1, 1]
+print(union(linked_list_5, linked_list_6))  # [1, 1, 1, 1]
+print(intersection(linked_list_5, linked_list_6))  # [1, 1]
+print()
+
+# Test case 6 - one empty list
+linked_list_5 = LinkedList()
+linked_list_6 = LinkedList()
+
+element_1 = []
+element_2 = [10]
+
+for i in element_1:
+    linked_list_5.append(i)
+
+for i in element_2:
+    linked_list_6.append(i)
+
+print(union(linked_list_5, linked_list_6))  # [10]
+print(intersection(linked_list_5, linked_list_6))  # []
+print()
+
+# Test case 7 - two empty lists
+linked_list_5 = LinkedList()
+linked_list_6 = LinkedList()
+
+element_1 = []
+element_2 = []
+
+for i in element_1:
+    linked_list_5.append(i)
+
+for i in element_2:
+    linked_list_6.append(i)
+
+print(union(linked_list_5, linked_list_6))  # []
+print(intersection(linked_list_5, linked_list_6))  # []
+print()
